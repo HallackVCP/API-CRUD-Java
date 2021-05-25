@@ -1,12 +1,14 @@
 package br.com.hallack.api.services;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hallack.api.domain.Categoria;
 import br.com.hallack.api.repositories.CategoriaRepository;
+import br.com.hallack.api.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -18,8 +20,10 @@ public class CategoriaService {
 	public Categoria buscar(Integer id) {
 		
 		Optional<Categoria> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				 "Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 		
-		return obj.orElse(null);
+		
 		
 	}
 
