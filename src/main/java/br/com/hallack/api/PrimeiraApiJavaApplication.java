@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.hallack.api.domain.Categoria;
 import br.com.hallack.api.domain.Cidade;
 import br.com.hallack.api.domain.Cliente;
 import br.com.hallack.api.domain.Endereco;
 import br.com.hallack.api.domain.Estado;
+import br.com.hallack.api.domain.ItemPedido;
 import br.com.hallack.api.domain.Pagamento;
 import br.com.hallack.api.domain.PagamentoComBoleto;
 import br.com.hallack.api.domain.PagamentoComCartao;
@@ -26,6 +26,7 @@ import br.com.hallack.api.repositories.CidadeRepository;
 import br.com.hallack.api.repositories.ClienteRepository;
 import br.com.hallack.api.repositories.EnderecoRepository;
 import br.com.hallack.api.repositories.EstadoRepository;
+import br.com.hallack.api.repositories.ItemPedidoRepository;
 import br.com.hallack.api.repositories.PagamentoRepository;
 import br.com.hallack.api.repositories.PedidoRepository;
 import br.com.hallack.api.repositories.ProdutoRepository;
@@ -57,6 +58,9 @@ public class PrimeiraApiJavaApplication implements CommandLineRunner{
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PrimeiraApiJavaApplication.class, args);
@@ -122,6 +126,21 @@ public class PrimeiraApiJavaApplication implements CommandLineRunner{
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
 		
 	}
 
